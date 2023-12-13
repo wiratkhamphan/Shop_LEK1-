@@ -1,34 +1,38 @@
 package condb
 
 import (
+	Env "SHOP_LEK/database/Env"
+	quan "SHOP_LEK/database/condb/quan"
+	"database/sql"
 	"fmt"
 	"log"
-	"os"
 
-	"github.com/joho/godotenv"
+	_ "github.com/go-sql-driver/mysql"
 )
 
-type Env struct {
-	DBDriver string
-	DBUser   string
-	DBPass   string
-	DBName   string
-}
-
-func NewEnv() (*Env, error) {
-	err := godotenv.Load("database/Env/.env")
+func NewConndb_mysql() (*sql.DB, error) {
+	env, err := Env.NewEnv()
 	if err != nil {
-		log.Fatal("Error loading .env file:", err)
+		return nil, err
 	}
 
-	env := &Env{
-		DBDriver: os.Getenv("DB_Driver"),
-		DBUser:   os.Getenv("DB_User"),
-		DBPass:   os.Getenv("DB_Pass"),
-		DBName:   os.Getenv("DB_name"),
+	db, err := sql.Open(env.DBDriver, env.DBUser+":"+env.DBPass+"@/"+env.DBName)
+	if err != nil {
+		log.Fatal(err)
 	}
-	fmt.Println(env)
+	defer db.Close()
 
-	return env, nil
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// print(db)
+	fmt.Println("Successfully connected!")
+	USER, err := quan.GetUser(db, 1)
+	if err != nil {
+		log.Fatal(err)
+	}
 
+	fmt.Println("Quan", USER)
+	return db, nil
 }
