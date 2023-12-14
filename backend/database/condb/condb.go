@@ -2,7 +2,6 @@ package condb
 
 import (
 	Env "SHOP_LEK/database/Env"
-	quan "SHOP_LEK/database/condb/quan"
 	"database/sql"
 	"fmt"
 	"log"
@@ -28,11 +27,12 @@ func NewConndb_mysql() (*sql.DB, error) {
 	}
 	// print(db)
 	fmt.Println("Successfully connected!")
-	USER, err := quan.GetUser(db, 1)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// USER, err := quan.GetUser(db, 1)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	fmt.Println("Quan", USER)
+	// fmt.Println("Quan", USER)
+	// quan.Shop(db)
 	return db, nil
 }

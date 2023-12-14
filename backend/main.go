@@ -1,12 +1,14 @@
+// main.go or wherever you initialize your application
 package main
 
 import (
-	Env "SHOP_LEK/database/Env"
-	condb "SHOP_LEK/database/condb"
+	RunLocalhost "SHOP_LEK/API/Shop/Shop_LEK"
 )
 
 func main() {
-	Env.NewEnv()
-	condb.NewConndb_mysql()
 
+	// ... other initialization code
+
+	// Run your application
+	RunLocalhost.RunLocalhost()
 }
