@@ -17,8 +17,9 @@ type ios_person struct {
 
 func GetUser(db *sql.DB, id int) (ios_person, error) {
 	var U ios_person
-	row := db.QueryRow(`SELECT id, username, password FROM users WHERE id = ?;`, id)
-	err := row.Scan(&U.Id, &U.iso_p_code, &U.password, &U.p_code, U.p_name, U.email)
+
+	row := db.QueryRow(`SELECT id, iso_p_code, p_code, email, password, p_name FROM ios_person WHERE id = ?;`, id)
+	err := row.Scan(&U.Id, &U.iso_p_code, &U.p_code, &U.email, &U.password, &U.p_name)
 	if err != nil {
 		return ios_person{}, err
 	}
