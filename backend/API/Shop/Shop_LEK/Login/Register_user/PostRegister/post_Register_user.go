@@ -31,7 +31,6 @@ func PostAlbums(c *gin.Context) {
 	}
 
 	fmt.Println("Received Data:", newAlbum)
-
 	_, err = db.Exec("INSERT INTO ios_person (iso_p_code, p_code, email, password, p_name) VALUES (?, ?,?, ?,?)",
 		newAlbum.Iso_p_code, newAlbum.P_code, newAlbum.Email, newAlbum.Password, newAlbum.P_name)
 	if err != nil {
