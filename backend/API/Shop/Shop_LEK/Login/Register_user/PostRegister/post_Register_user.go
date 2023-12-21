@@ -1,9 +1,11 @@
-// PostRegister/post_Register_user.go
 package PostRegister
 
 import (
+	dbtypeiosperson "SHOP_LEK/API/Shop/Shop_LEK/Login/DbtypeIosPerson"
+	condb "SHOP_LEK/database/condb"
 	"database/sql"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,17 +13,16 @@ import (
 
 var db *sql.DB
 
-type IOSPerson struct {
-	ID         string `json:"id"`
-	Iso_p_code string `json:"iso_p_code"`
-	P_code     string `json:"p_code"`
-	Email      string `json:"email"`
-	Password   string `json:"password"`
-	P_name     string `json:"p_name"`
-}
-
 func PostAlbums(c *gin.Context) {
-	var newAlbum IOSPerson
+	var err error
+
+	// Use the existing db variable from the package scope
+	db, err = condb.NewConndb_mysql()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var newAlbum dbtypeiosperson.IOSPerson
 
 	if err := c.BindJSON(&newAlbum); err != nil {
 		fmt.Println("Error binding JSON:", err)
@@ -30,10 +31,8 @@ func PostAlbums(c *gin.Context) {
 	}
 
 	fmt.Println("Received Data:", newAlbum)
-
-	_, err := db.Exec("INSERT INTO ios_person (iso_p_code, p_code, email, password, p_name) VALUES (?, ?,?, ?,?)",
+	_, err = db.Exec("INSERT INTO ios_person (iso_p_code, p_code, email, password, p_name) VALUES (?, ?,?, ?,?)",
 		newAlbum.Iso_p_code, newAlbum.P_code, newAlbum.Email, newAlbum.Password, newAlbum.P_name)
-
 	if err != nil {
 		fmt.Println("Error inserting into database:", err)
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to insert data into the database"})

@@ -8,5 +8,5 @@ import (
 )
 
 func PostAlbums_1(c *gin.Context) {
-	PostRegister.PostAlbums(c)
+	PostRegister.PostAlbums(c.Copy())
 }
